@@ -1,0 +1,29 @@
+CREATE DATABASE EventEase
+    DEFAULT CHARACTER SET = 'utf8mb4';
+
+    USE EventEase;
+
+
+CREATE TABLE Usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    nombres VARCHAR(255) NOT NULL,
+    apellidos VARCHAR(255) NOT NULL,
+    tipo_documento VARCHAR(255) NOT NULL,
+    documento VARCHAR(50) NOT NULL,
+    rol VARCHAR(50) NOT NULL,
+    avatar VARCHAR(255),
+    contrasena VARCHAR(255) NOT NULL,  -- Encriptar la contraseña
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+SELECT * FROM usuarios;
+
+
+
+DROP DATABASE EventEase;
+
+
+        

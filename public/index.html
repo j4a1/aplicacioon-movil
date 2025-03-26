@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+    <script type="module">
+        // Exponemos la función a window para que sea accesible globalmente
+        window.resetPassword = async function() {
+            const newPassword = document.getElementById("newPassword").value;
+            const urlParams = new URLSearchParams(window.location.search);
+            const oobCode = urlParams.get("oobCode");
+
+            if (!oobCode) {
+                document.getElementById("message").innerText = "Enlace inválido o expirado.";
+                return;
+            }
+
+            try {
+                // Enviar la nueva contraseña a tu API en Node.js (Express)
+                await fetch("http://localhost:3000/api/actualizar_contrasena", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        oobCode: oobCode,  // Enviar el oobCode para identificar el enlace
+                        nueva_contrasena: newPassword
+                    })
+                });
+
+                document.getElementById("message").innerText = "Contraseña cambiada con éxito.";
+            } catch (error) {
+                document.getElementById("message").innerText = "Error: " + error.message;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Restablecer tu contraseña</h2>
+    <input type="password" id="newPassword" placeholder="Nueva contraseña">
+    <button onclick="resetPassword()">Cambiar contraseña</button>
+    <p id="message"></p>
+</body>
+</html>

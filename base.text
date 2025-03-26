@@ -1,0 +1,66 @@
+CREATE DATABASE EventEase
+    DEFAULT CHARACTER SET = 'utf8mb4';
+
+USE EventEase;
+
+CREATE TABLE Usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    nombres VARCHAR(255) NOT NULL,
+    apellidos VARCHAR(255) NOT NULL,
+    tipo_documento VARCHAR(255) NOT NULL,
+    documento VARCHAR(50) NOT NULL,
+    rol VARCHAR(50) NOT NULL,
+    avatar VARCHAR(255),
+    contrasena VARCHAR(255) NOT NULL,  -- Encriptar la contraseña
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- tabla para locales
+CREATE TABLE Locales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    direccion VARCHAR(255) NULL,
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    contrato_url VARCHAR(255),  
+    proveedor_id INT NOT NULL,  
+    pdf_url VARCHAR(255),       
+    FOREIGN KEY (proveedor_id) REFERENCES Usuarios(id) ON DELETE CASCADE
+);
+
+--tabla para IMAGENES DE LOCALES
+CREATE TABLE ImagenesLocales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    local_id INT NOT NULL,  -- ID del local al que pertenece la imagen
+    url_imagen VARCHAR(255) NOT NULL,  -- URL de la imagen
+    FOREIGN KEY (local_id) REFERENCES Locales(id) ON DELETE CASCADE
+);
+
+
+SELECT 
+    l.id AS local_id,
+    l.nombre,
+    l.direccion,
+    l.fecha_registro,
+    l.contrato_url,
+    l.pdf_url,
+    l.proveedor_id,
+    GROUP_CONCAT(i.url_imagen SEPARATOR ', ') AS imagenes
+FROM Locales l
+LEFT JOIN ImagenesLocales i ON l.id = i.local_id
+GROUP BY l.id;
+
+
+
+
+
+SELECT * FROM Usuarios;
+SELECT * FROM Locales;
+SELECT * FROM ImagenesLocales;
+
+DROP TABLE Locales;
+DROP TABLE ImagenesLocales;
+
+
+
+DROP DATABASE EventEase;
